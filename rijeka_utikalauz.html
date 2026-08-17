@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rijeka & Kvarner – útikalauz</title>
+<meta name="description" content="Rijeka és Kvarner személyes útikalauz: látnivalók, kávézók, éttermek, parkolás, ételek és horvát kifejezések.">
+<style>
+:root {
+  --bg:#f5f6f8;
+  --panel:#ffffff;
+  --text:#182028;
+  --muted:#68737f;
+  --line:#dfe4e8;
+  --accent:#0f6b78;
+  --accent-2:#e7f3f5;
+  --warm:#b76b2c;
+  --shadow:0 8px 26px rgba(24,32,40,.08);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text); background:linear-gradient(180deg,#eef5f6 0,#f5f6f8 280px);
+  line-height:1.55;
+}
+header {
+  padding:42px 18px 28px; text-align:center;
+}
+.hero {
+  max-width:1100px; margin:0 auto; padding:34px 24px;
+  background:linear-gradient(135deg,#0f6b78,#164f65);
+  color:white; border-radius:24px; box-shadow:var(--shadow);
+}
+.hero h1 { margin:0 0 8px; font-size:clamp(2rem,6vw,3.6rem); letter-spacing:-.03em; }
+.hero p { margin:0 auto; max-width:720px; opacity:.9; font-size:1.02rem; }
+.wrap { max-width:1100px; margin:0 auto; padding:0 18px 60px; }
+.toolbar {
+  position:sticky; top:10px; z-index:20; margin:0 0 28px;
+  display:flex; gap:10px; flex-wrap:wrap; padding:12px;
+  background:rgba(245,246,248,.86); backdrop-filter:blur(12px);
+  border:1px solid rgba(223,228,232,.9); border-radius:16px;
+}
+input {
+  flex:1 1 280px; min-width:0; padding:13px 15px; border:1px solid var(--line);
+  border-radius:12px; font:inherit; background:white;
+}
+button, .quick {
+  appearance:none; border:1px solid var(--line); background:white; color:var(--text);
+  border-radius:12px; padding:11px 14px; font:inherit; cursor:pointer; text-decoration:none;
+}
+button:hover, .quick:hover { border-color:var(--accent); color:var(--accent); }
+.section { margin:34px 0; }
+.section-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.section-head h2 { margin:0; font-size:1.45rem; }
+.count { font-size:.82rem; padding:3px 8px; border-radius:999px; background:var(--accent-2); color:var(--accent); }
+.grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;
+}
+.card {
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  box-shadow:var(--shadow);
+}
+.item-card { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px; }
+.item-card h3 { margin:0 0 2px; font-size:1.02rem; }
+.item-card p { margin:0; color:var(--muted); font-size:.92rem; }
+.map-btn {
+  white-space:nowrap; text-decoration:none; font-weight:650; color:var(--accent);
+  background:var(--accent-2); padding:9px 11px; border-radius:10px;
+}
+.map-btn:hover { background:#d4ecef; }
+.food-grid { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+.food-card { padding:16px; display:flex; flex-direction:column; gap:4px; }
+.food-card span { color:var(--muted); font-size:.92rem; }
+.pills { display:flex; flex-wrap:wrap; gap:10px; }
+.pill { padding:10px 13px; border-radius:999px; background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); }
+details {
+  background:white; border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow);
+}
+details summary {
+  cursor:pointer; list-style:none; padding:16px 18px; font-weight:700; font-size:1.05rem;
+  background:linear-gradient(90deg,#fff,#f7fbfb);
+}
+details summary::-webkit-details-marker { display:none; }
+.phrases-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; min-width:650px; }
+th,td { padding:11px 12px; border-top:1px solid var(--line); text-align:left; }
+th { background:#f8fafb; font-size:.9rem; }
+td:nth-child(3) { color:var(--warm); }
+footer { text-align:center; color:var(--muted); padding:30px 10px 10px; font-size:.9rem; }
+@media (max-width:700px) {
+  header { padding-top:22px; }
+  .hero { padding:28px 18px; border-radius:18px; }
+  .wrap { padding:0 12px 40px; }
+  .toolbar { top:6px; }
+  .item-card { align-items:flex-start; }
+  .map-btn { padding:8px 10px; font-size:.9rem; }
+}
+.hidden { display:none !important; }
+.badge { display:inline-block; margin-top:16px; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.12); font-size:.9rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="hero">
+    <h1>Rijeka & Kvarner</h1>
+    <p>Saját útikalauz látnivalókkal, tengerparti helyekkel, parkolással, gasztronómiával és hasznos horvát kifejezésekkel.</p>
+    <span class="badge">📍 Kattints a „Térkép” gombra a navigációhoz</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Keresés: pl. Vrbnik, kávé, škampi, parkoló…">
+    <button type="button" onclick="clearSearch()">Törlés</button>
+    <a class="quick" href="#kifejezesek">🗣️ Kifejezések</a>
+  </div>
+
+  <div id="content">
+    
+    <section class="section" data-section="Látnivalók">
+      <div class="section-head">
+        <h2>Látnivalók</h2>
+        <span class="count">9</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div>
+            <h3>PEEK &amp; POKE</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=PEEK%20%26%20POKE%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Belváros</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Rijeka%20Old%20Town">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Korzo</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Korzo%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Trsat vára</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Trsat%20Castle%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>JGL Muzej farmacije</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=JGL%20Muzej%20farmacije%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Opatija</h3>
+            <p>Kvarner</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Opatija%20Croatia">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Lovran</h3>
+            <p>Kvarner</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Lovran%20Croatia">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Predjama vár</h3>
+            <p>Szlovénia</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Predjama%20Castle%20Slovenia">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Krk-sziget</h3>
+            <p>Óváros · híd · Vrbnik · Klančić</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Krk%20Island%20Croatia">Térkép ↗</a>
+        </article></div>
+    </section>
+    <section class="section" data-section="Kávé &amp; Brunch + kilátás">
+      <div class="section-head">
+        <h2>Kávé &amp; Brunch + kilátás</h2>
+        <span class="count">2</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div>
+            <h3>Amadria Park Caffè Wagner</h3>
+            <p>Opatija</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Amadria%20Park%20Caffe%20Wagner%20Opatija">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>La Terrazza</h3>
+            <p>Opatija</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Terrazza%20Opatija">Térkép ↗</a>
+        </article></div>
+    </section>
+    <section class="section" data-section="Étterem / Vacsora + kilátás">
+      <div class="section-head">
+        <h2>Étterem / Vacsora + kilátás</h2>
+        <span class="count">5</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div>
+            <h3>Bistro Na Kantridi</h3>
+            <p>stadion és tengerpart mellett</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Bistro%20Na%20Kantridi%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Boonker</h3>
+            <p>kikötőben</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Boonker%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Restoran Lungomare</h3>
+            <p>Opatija</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Restoran%20Lungomare%20Opatija">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Ostaria Veranda</h3>
+            <p>Volosko</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Ostaria%20Veranda%20Volosko">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Volosko kikötő / part</h3>
+            <p>sok étterem és bár</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Volosko%20harbour%20Croatia">Térkép ↗</a>
+        </article></div>
+    </section>
+    <section class="section" data-section="Belvárosi parkolóházak">
+      <div class="section-head">
+        <h2>Belvárosi parkolóházak</h2>
+        <span class="count">2</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div>
+            <h3>Stari Grad</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Stari%20Grad%20Parking%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div>
+            <h3>Zagrad B Parking lot</h3>
+            <p>Rijeka</p>
+          </div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Zagrad%20B%20Parking%20Rijeka">Térkép ↗</a>
+        </article></div>
+    </section>
+
+    <section class="section searchable" data-section="Megkóstolandó ételek és italok">
+      <div class="section-head"><h2>Megkóstolandó ételek és italok</h2><span class="count">11</span></div>
+      <div class="grid food-grid"><article class="card food-card"><strong>Crni rižot</strong><span>tintahalas rizottó</span></article><article class="card food-card"><strong>Kvarneri škampi</strong><span>kvarneri rák / langusztina</span></article><article class="card food-card"><strong>Šurlice</strong><span>krki kézműves tésztaétel</span></article><article class="card food-card"><strong>Hobotnica na salatu</strong><span>polipsaláta</span></article><article class="card food-card"><strong>Pršut</strong><span>horvát sonka</span></article><article class="card food-card"><strong>Pašticada</strong><span>párolt marha tésztával</span></article><article class="card food-card"><strong>Janjetina</strong><span>bárány</span></article><article class="card food-card"><strong>Juhsajt</strong><span>helyi juhsajt</span></article><article class="card food-card"><strong>Žlahtina</strong><span>helyi krki fehérbor</span></article><article class="card food-card"><strong>Kávé</strong><span>kava</span></article><article class="card food-card"><strong>Fritule</strong><span>kis horvát fánkgolyók</span></article></div>
+    </section>
+
+    <section class="section searchable" data-section="Szuvenír">
+      <div class="section-head"><h2>Szuvenír</h2><span class="count">7</span></div>
+      <div class="pills"><span class="pill">Olívaolaj</span><span class="pill">Tengeri só</span><span class="pill">Pršut</span><span class="pill">Paški sir</span><span class="pill">Szarvasgombás termék</span><span class="pill">Bajadera</span><span class="pill">Griotte</span></div>
+    </section>
+
+    <section class="section searchable" id="kifejezesek" data-section="Legfontosabb kifejezések">
+      <details open>
+        <summary>🗣️ Legfontosabb kifejezések</summary>
+        <div class="phrases-wrap">
+          <table>
+            <thead><tr><th>Horvátul</th><th>Magyarul</th><th>Magyaros kiejtés</th></tr></thead>
+            <tbody><tr><td><strong>Bok!</strong></td><td>Szia!</td><td><em>bok</em></td></tr><tr><td><strong>Dobar dan!</strong></td><td>Jó napot!</td><td><em>dóbár dán</em></td></tr><tr><td><strong>Dobro jutro!</strong></td><td>Jó reggelt!</td><td><em>dóbró jutró</em></td></tr><tr><td><strong>Dobra večer!</strong></td><td>Jó estét!</td><td><em>dóbrá vecser</em></td></tr><tr><td><strong>Laku noć!</strong></td><td>Jó éjszakát!</td><td><em>lákú nocs</em></td></tr><tr><td><strong>Doviđenja!</strong></td><td>Viszontlátásra!</td><td><em>dóvígyenyá</em></td></tr><tr><td><strong>Hvala!</strong></td><td>Köszönöm!</td><td><em>hvála</em></td></tr><tr><td><strong>Hvala lijepa!</strong></td><td>Nagyon köszönöm!</td><td><em>hvála lijepá</em></td></tr><tr><td><strong>Molim.</strong></td><td>Kérem. / Szívesen.</td><td><em>mólim</em></td></tr><tr><td><strong>Da.</strong></td><td>Igen.</td><td><em>dá</em></td></tr><tr><td><strong>Ne.</strong></td><td>Nem.</td><td><em>ne</em></td></tr><tr><td><strong>Dobro.</strong></td><td>Rendben. / Jó.</td><td><em>dóbró</em></td></tr><tr><td><strong>Nema problema.</strong></td><td>Semmi gond.</td><td><em>néma probléma</em></td></tr><tr><td><strong>Oprostite.</strong></td><td>Elnézést!</td><td><em>óproszti-te</em></td></tr><tr><td><strong>Izvinite.</strong></td><td>Elnézést!</td><td><em>izvíníte</em></td></tr><tr><td><strong>Kako ste?</strong></td><td>Hogy van?</td><td><em>kákó szte?</em></td></tr><tr><td><strong>Dobro sam.</strong></td><td>Jól vagyok.</td><td><em>dóbró szám</em></td></tr><tr><td><strong>Kako se zove?</strong></td><td>Hogy hívják?</td><td><em>kákó sze zóve?</em></td></tr><tr><td><strong>Ne razumijem.</strong></td><td>Nem értem.</td><td><em>ne razumijem</em></td></tr><tr><td><strong>Govorite li engleski?</strong></td><td>Beszél angolul?</td><td><em>góvorite li engelszki?</em></td></tr><tr><td><strong>Govorite li mađarski?</strong></td><td>Beszél magyarul?</td><td><em>góvorite li mágyárszki?</em></td></tr><tr><td><strong>Koliko košta?</strong></td><td>Mennyibe kerül?</td><td><em>kólíkó kóstá?</em></td></tr><tr><td><strong>Koliko je ovo?</strong></td><td>Ez mennyibe kerül?</td><td><em>kólíkó je óvó?</em></td></tr><tr><td><strong>Gdje je…?</strong></td><td>Hol van…?</td><td><em>gye je…?</em></td></tr><tr><td><strong>Gdje je WC?</strong></td><td>Hol van a WC?</td><td><em>gye je vécé?</em></td></tr><tr><td><strong>Lijevo.</strong></td><td>Balra.</td><td><em>lijévó</em></td></tr><tr><td><strong>Desno.</strong></td><td>Jobbra.</td><td><em>desznó</em></td></tr><tr><td><strong>Ravno.</strong></td><td>Egyenesen.</td><td><em>rávnó</em></td></tr><tr><td><strong>Pomoć!</strong></td><td>Segítség!</td><td><em>pómócs</em></td></tr><tr><td><strong>Račun, molim.</strong></td><td>A számlát, kérem.</td><td><em>rácsun, mólim</em></td></tr><tr><td><strong>Karticom, molim.</strong></td><td>Kártyával, kérem.</td><td><em>kárticóm, mólim</em></td></tr><tr><td><strong>Gotovina.</strong></td><td>Készpénz.</td><td><em>gótóviná</em></td></tr><tr><td><strong>Voda.</strong></td><td>Víz.</td><td><em>vódá</em></td></tr><tr><td><strong>Pivo.</strong></td><td>Sör.</td><td><em>pívó</em></td></tr><tr><td><strong>Kava.</strong></td><td>Kávé.</td><td><em>kává</em></td></tr><tr><td><strong>Čaša vina.</strong></td><td>Egy pohár bor.</td><td><em>csásá víná</em></td></tr><tr><td><strong>Jednu pivu, molim.</strong></td><td>Egy sört kérek.</td><td><em>jednű pívú, mólim</em></td></tr><tr><td><strong>Bez…</strong></td><td>…nélkül.</td><td><em>bez</em></td></tr><tr><td><strong>S računom, molim.</strong></td><td>A számlával együtt, kérem.</td><td><em>sz rácsúnóm, mólim</em></td></tr><tr><td><strong>Ukusno!</strong></td><td>Finom!</td><td><em>ukuszno</em></td></tr><tr><td><strong>Odlično!</strong></td><td>Kiváló!</td><td><em>ódlícsnó</em></td></tr></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  </div>
+</main>
+
+<footer>Rijeka & Kvarner útikalauz · mobilbarát, kattintható HTML</footer>
+
+<script>
+const input = document.getElementById('search');
+const sections = [...document.querySelectorAll('.section')];
+
+function applySearch() {
+  const q = input.value.trim().toLowerCase();
+  sections.forEach(section => {
+    const text = section.innerText.toLowerCase();
+    section.classList.toggle('hidden', q && !text.includes(q));
+  });
+}
+function clearSearch() {
+  input.value = '';
+  applySearch();
+  input.focus();
+}
+input.addEventListener('input', applySearch);
+</script>
+</body>
+</html>
