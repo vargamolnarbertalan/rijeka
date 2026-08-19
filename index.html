@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rijeka & Kvarner – útikalauz</title>
 <meta name="description" content="Rijeka és Kvarner személyes útikalauz: látnivalók, kávézók, éttermek, parkolás, ételek és horvát kifejezések.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 :root {
   --bg:#f5f6f8;
@@ -55,23 +56,43 @@ button:hover, .quick:hover { border-color:var(--accent); color:var(--accent); }
 .section-head h2 { margin:0; font-size:1.45rem; }
 .count { font-size:.82rem; padding:3px 8px; border-radius:999px; background:var(--accent-2); color:var(--accent); }
 .grid {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px;
 }
 .card {
   background:var(--panel); border:1px solid var(--line); border-radius:16px;
   box-shadow:var(--shadow);
 }
 .item-card { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px; }
+.item-main { display:flex; align-items:center; gap:14px; min-width:0; }
 .item-card h3 { margin:0 0 2px; font-size:1.02rem; }
 .item-card p { margin:0; color:var(--muted); font-size:.92rem; }
+.thumb {
+  position:relative; overflow:hidden;
+  flex:0 0 52px; width:52px; height:52px; border-radius:14px;
+  background:linear-gradient(135deg,var(--accent-2),#fff);
+  box-shadow:inset 0 0 0 1px var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem; line-height:1;
+}
+.thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
+.thumb.sm { flex-basis:44px; width:44px; height:44px; font-size:1.3rem; border-radius:12px; }
 .map-btn {
   white-space:nowrap; text-decoration:none; font-weight:650; color:var(--accent);
   background:var(--accent-2); padding:9px 11px; border-radius:10px;
 }
 .map-btn:hover { background:#d4ecef; }
 .food-grid { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
-.food-card { padding:16px; display:flex; flex-direction:column; gap:4px; }
+.food-card { padding:16px; display:flex; align-items:center; gap:12px; }
+.food-text { display:flex; flex-direction:column; gap:2px; min-width:0; }
 .food-card span { color:var(--muted); font-size:.92rem; }
+.map-embed {
+  height:440px; border-radius:16px; overflow:hidden; border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.map-embed iframe, .map-embed #leaflet-map { width:100%; height:100%; border:0; }
+.map-legend { display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; font-size:.85rem; color:var(--muted); }
+.map-legend span { display:inline-flex; align-items:center; gap:6px; }
+.dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
 .pills { display:flex; flex-wrap:wrap; gap:10px; }
 .pill { padding:10px 13px; border-radius:999px; background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); }
 details {
@@ -114,78 +135,134 @@ footer { text-align:center; color:var(--muted); padding:30px 10px 10px; font-siz
     <input id="search" type="search" placeholder="Keresés: pl. Vrbnik, kávé, škampi, parkoló…">
     <button type="button" onclick="clearSearch()">Törlés</button>
     <a class="quick" href="#kifejezesek">🗣️ Kifejezések</a>
+    <a class="quick" href="#terkep">🗺️ Térkép</a>
   </div>
 
   <div id="content">
-    
+
+    <section class="section" id="terkep" data-section="Térkép">
+      <div class="section-head">
+        <h2>Térkép</h2>
+      </div>
+      <div class="map-embed"><div id="leaflet-map"></div></div>
+      <div class="map-legend">
+        <span><i class="dot" style="background:#0f6b78"></i> Látnivaló</span>
+        <span><i class="dot" style="background:#b76b2c"></i> Kávé / Étterem</span>
+        <span><i class="dot" style="background:#68737f"></i> Parkoló</span>
+        <span><i class="dot" style="background:#7b4fa6"></i> Szállás</span>
+      </div>
+    </section>
+
     <section class="section" data-section="Látnivalók">
       <div class="section-head">
         <h2>Látnivalók</h2>
-        <span class="count">9</span>
+        <span class="count">15</span>
       </div>
       <div class="grid">
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🖥️</div><div>
             <h3>PEEK &amp; POKE</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=PEEK%20%26%20POKE%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏙️</div><div>
             <h3>Belváros</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Rijeka%20Old%20Town">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🚶</div><div>
             <h3>Korzo</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Korzo%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏯</div><div>
             <h3>Trsat vára</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Trsat%20Castle%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">💊</div><div>
             <h3>JGL Muzej farmacije</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=JGL%20Muzej%20farmacije%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🌴</div><div>
             <h3>Opatija</h3>
             <p>Kvarner</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Opatija%20Croatia">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🌊</div><div>
             <h3>Lovran</h3>
             <p>Kvarner</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Lovran%20Croatia">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏰</div><div>
             <h3>Predjama vár</h3>
             <p>Szlovénia</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Predjama%20Castle%20Slovenia">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏝️</div><div>
             <h3>Krk-sziget</h3>
             <p>Óváros · híd · Vrbnik · Klančić</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Krk%20Island%20Croatia">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🚢</div><div>
+            <h3>Kolodko miniszobor: Carpathia hajó</h3>
+            <p>Rijeka</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Kolodko%20Carpathia%20mini%20statue%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🕯️</div><div>
+            <h3>Spomenik i spomen-kosturnica palih boraca</h3>
+            <p>Park heroja, Trsat</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Spomen-kosturnica%20palih%20boraca%20Park%20heroja%20Trsat%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🌄</div><div>
+            <h3>Vidikovac Fortica</h3>
+            <p>Trsat, Rijeka</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Vidikovac%20Fortica%20Trsat%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🚪</div><div>
+            <h3>Banska vrata</h3>
+            <p>Trsat, Rijeka</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Banska%20vrata%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏖️</div><div>
+            <h3>Sablićevo strand</h3>
+            <p>Pećine, Rijeka</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Sablicevo%20beach%20Rijeka">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍹</div><div>
+            <h3>Beach bar Kamov</h3>
+            <p>Pećine, Rijeka</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Beach%20bar%20Kamov%20Rijeka">Térkép ↗</a>
         </article></div>
     </section>
     <section class="section" data-section="Kávé &amp; Brunch + kilátás">
@@ -195,60 +272,74 @@ footer { text-align:center; color:var(--muted); padding:30px 10px 10px; font-siz
       </div>
       <div class="grid">
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">☕</div><div>
             <h3>Amadria Park Caffè Wagner</h3>
             <p>Opatija</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Amadria%20Park%20Caffe%20Wagner%20Opatija">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">☕</div><div>
             <h3>La Terrazza</h3>
             <p>Opatija</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Terrazza%20Opatija">Térkép ↗</a>
         </article></div>
     </section>
     <section class="section" data-section="Étterem / Vacsora + kilátás">
       <div class="section-head">
         <h2>Étterem / Vacsora + kilátás</h2>
-        <span class="count">5</span>
+        <span class="count">8</span>
       </div>
       <div class="grid">
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍽️</div><div>
             <h3>Bistro Na Kantridi</h3>
             <p>stadion és tengerpart mellett</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Bistro%20Na%20Kantridi%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍽️</div><div>
             <h3>Boonker</h3>
             <p>kikötőben</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Boonker%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍽️</div><div>
             <h3>Restoran Lungomare</h3>
             <p>Opatija</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Restoran%20Lungomare%20Opatija">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍝</div><div>
             <h3>Ostaria Veranda</h3>
             <p>Volosko</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Ostaria%20Veranda%20Volosko">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">⚓</div><div>
             <h3>Volosko kikötő / part</h3>
             <p>sok étterem és bár</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Volosko%20harbour%20Croatia">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍕</div><div>
+            <h3>Restaurant Zrinski</h3>
+            <p>Krk</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Restaurant%20Zrinski%20Krk">Térkép ↗</a>
+        </article>
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🍕</div><div>
+            <h3>Pizzeria Bella Vista</h3>
+            <p>Njivice, Krk-sziget</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Pizzeria%20Bella%20Vista%20Primorska%20cesta%2017%20Njivice%20Krk">Térkép ↗</a>
         </article></div>
     </section>
     <section class="section" data-section="Belvárosi parkolóházak">
@@ -258,29 +349,59 @@ footer { text-align:center; color:var(--muted); padding:30px 10px 10px; font-siz
       </div>
       <div class="grid">
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🅿️</div><div>
             <h3>Stari Grad</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Stari%20Grad%20Parking%20Rijeka">Térkép ↗</a>
         </article>
         <article class="card item-card">
-          <div>
+          <div class="item-main"><div class="thumb" aria-hidden="true">🅿️</div><div>
             <h3>Zagrad B Parking lot</h3>
             <p>Rijeka</p>
-          </div>
+          </div></div>
           <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Zagrad%20B%20Parking%20Rijeka">Térkép ↗</a>
         </article></div>
     </section>
 
+    <section class="section" data-section="Szállás">
+      <div class="section-head">
+        <h2>Szállás</h2>
+        <span class="count">1</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🏠</div><div>
+            <h3>Szállás</h3>
+            <p>Šetalište XIII divizije 17, 51000 Rijeka, Horvátország</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=%C5%A0etali%C5%A1te%20XIII%20divizije%2017%2C%2051000%20Rijeka%2C%20Croatia">Térkép ↗</a>
+        </article></div>
+    </section>
+
     <section class="section searchable" data-section="Megkóstolandó ételek és italok">
-      <div class="section-head"><h2>Megkóstolandó ételek és italok</h2><span class="count">11</span></div>
-      <div class="grid food-grid"><article class="card food-card"><strong>Crni rižot</strong><span>tintahalas rizottó</span></article><article class="card food-card"><strong>Kvarneri škampi</strong><span>kvarneri rák / langusztina</span></article><article class="card food-card"><strong>Šurlice</strong><span>krki kézműves tésztaétel</span></article><article class="card food-card"><strong>Hobotnica na salatu</strong><span>polipsaláta</span></article><article class="card food-card"><strong>Pršut</strong><span>horvát sonka</span></article><article class="card food-card"><strong>Pašticada</strong><span>párolt marha tésztával</span></article><article class="card food-card"><strong>Janjetina</strong><span>bárány</span></article><article class="card food-card"><strong>Juhsajt</strong><span>helyi juhsajt</span></article><article class="card food-card"><strong>Žlahtina</strong><span>helyi krki fehérbor</span></article><article class="card food-card"><strong>Kávé</strong><span>kava</span></article><article class="card food-card"><strong>Fritule</strong><span>kis horvát fánkgolyók</span></article></div>
+      <div class="section-head"><h2>Megkóstolandó ételek és italok</h2><span class="count">14</span></div>
+      <div class="grid food-grid"><article class="card food-card"><div class="thumb sm" data-q="black risotto" aria-hidden="true">🍚</div><div class="food-text"><strong>Crni rižot</strong><span>tintahalas rizottó</span></div></article><article class="card food-card"><div class="thumb sm" data-q="scampi langoustine" aria-hidden="true">🦐</div><div class="food-text"><strong>Kvarneri škampi</strong><span>kvarneri rák / langusztina</span></div></article><article class="card food-card"><div class="thumb sm" data-q="šurlice pasta krk" aria-hidden="true">🍝</div><div class="food-text"><strong>Šurlice</strong><span>krki kézműves tésztaétel</span></div></article><article class="card food-card"><div class="thumb sm" data-q="hobotnica na salatu" aria-hidden="true">🐙</div><div class="food-text"><strong>Hobotnica na salatu</strong><span>polipsaláta</span></div></article><article class="card food-card"><div class="thumb sm" data-q="prsut" aria-hidden="true">🥓</div><div class="food-text"><strong>Pršut</strong><span>horvát sonka</span></div></article><article class="card food-card"><div class="thumb sm" data-q="pašticada" aria-hidden="true">🍖</div><div class="food-text"><strong>Pašticada</strong><span>párolt marha tésztával</span></div></article><article class="card food-card"><div class="thumb sm" data-q="janjetina" aria-hidden="true">🐑</div><div class="food-text"><strong>Janjetina</strong><span>bárány</span></div></article><article class="card food-card"><div class="thumb sm" data-q="pag cheese" aria-hidden="true">🧀</div><div class="food-text"><strong>Juhsajt</strong><span>helyi juhsajt</span></div></article><article class="card food-card"><div class="thumb sm" data-q="malvasia wine" aria-hidden="true">🍷</div><div class="food-text"><strong>Žlahtina</strong><span>helyi krki fehérbor</span></div></article><article class="card food-card"><div class="thumb sm" data-q="cup of coffee" aria-hidden="true">☕</div><div class="food-text"><strong>Kávé</strong><span>kava</span></div></article><article class="card food-card"><div class="thumb sm" data-q="fritule" aria-hidden="true">🍩</div><div class="food-text"><strong>Fritule</strong><span>kis horvát fánkgolyók</span></div></article><article class="card food-card"><div class="thumb sm" data-q="fried calamari rings" aria-hidden="true">🍤</div><div class="food-text"><strong>Rántott kalamári</strong><span>bundában sült tintahalkarikák</span></div></article><article class="card food-card"><div class="thumb sm" data-q="grilled squid" aria-hidden="true">🦑</div><div class="food-text"><strong>Grillezett kalamári</strong><span>roston sült tintahal</span></div></article><article class="card food-card"><div class="thumb sm" data-q="burek pastry" aria-hidden="true">🥧</div><div class="food-text"><strong>Burek</strong><span>leveles tésztás, töltött rétes</span></div></article></div>
     </section>
 
     <section class="section searchable" data-section="Szuvenír">
       <div class="section-head"><h2>Szuvenír</h2><span class="count">7</span></div>
       <div class="pills"><span class="pill">Olívaolaj</span><span class="pill">Tengeri só</span><span class="pill">Pršut</span><span class="pill">Paški sir</span><span class="pill">Szarvasgombás termék</span><span class="pill">Bajadera</span><span class="pill">Griotte</span></div>
+    </section>
+
+    <section class="section" data-section="Piac / Bevásárlás">
+      <div class="section-head">
+        <h2>Piac / Bevásárlás</h2>
+        <span class="count">1</span>
+      </div>
+      <div class="grid">
+        <article class="card item-card">
+          <div class="item-main"><div class="thumb" aria-hidden="true">🥬</div><div>
+            <h3>Ivić voće i povrće</h3>
+            <p>Njivice, Krk-sziget</p>
+          </div></div>
+          <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=45.16430833906621%2C14.541884827137045">Térkép ↗</a>
+        </article></div>
     </section>
 
     <section class="section searchable" id="kifejezesek" data-section="Legfontosabb kifejezések">
@@ -316,6 +437,80 @@ function clearSearch() {
   input.focus();
 }
 input.addEventListener('input', applySearch);
+
+document.querySelectorAll('.thumb[data-q]').forEach(el => {
+  const q = el.getAttribute('data-q');
+  fetch(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=1&mature=false`)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      const hit = data && data.results && data.results[0];
+      if (!hit) return;
+      const candidates = [hit.thumbnail, hit.url].filter(Boolean);
+      const tryNext = () => {
+        const src = candidates.shift();
+        if (!src) return;
+        const img = new Image();
+        img.alt = q;
+        img.loading = 'lazy';
+        img.onload = () => { el.textContent = ''; el.appendChild(img); };
+        img.onerror = tryNext;
+        img.src = src;
+      };
+      tryNext();
+    })
+    .catch(() => {});
+});
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const COLORS = { sight: '#0f6b78', food: '#b76b2c', parking: '#68737f', stay: '#7b4fa6' };
+const PLACES = [
+  { name: 'PEEK & POKE', cat: 'sight', lat: 45.32811, lng: 14.44526, url: 'https://www.google.com/maps/search/?api=1&query=PEEK%20%26%20POKE%20Rijeka' },
+  { name: 'Belváros', cat: 'sight', lat: 45.32710, lng: 14.44601, url: 'https://www.google.com/maps/search/?api=1&query=Rijeka%20Old%20Town' },
+  { name: 'Korzo', cat: 'sight', lat: 45.32630, lng: 14.44290, url: 'https://www.google.com/maps/search/?api=1&query=Korzo%20Rijeka' },
+  { name: 'Trsat vára', cat: 'sight', lat: 45.33249, lng: 14.45546, url: 'https://www.google.com/maps/search/?api=1&query=Trsat%20Castle%20Rijeka' },
+  { name: 'JGL Muzej farmacije', cat: 'sight', lat: 45.32996, lng: 14.44212, url: 'https://www.google.com/maps/search/?api=1&query=JGL%20Muzej%20farmacije%20Rijeka' },
+  { name: 'Opatija', cat: 'sight', lat: 45.33492, lng: 14.30678, url: 'https://www.google.com/maps/search/?api=1&query=Opatija%20Croatia' },
+  { name: 'Lovran', cat: 'sight', lat: 45.29168, lng: 14.27626, url: 'https://www.google.com/maps/search/?api=1&query=Lovran%20Croatia' },
+  { name: 'Predjama vár', cat: 'sight', lat: 45.81573, lng: 14.12659, url: 'https://www.google.com/maps/search/?api=1&query=Predjama%20Castle%20Slovenia' },
+  { name: 'Krk-sziget', cat: 'sight', lat: 45.02710, lng: 14.57450, url: 'https://www.google.com/maps/search/?api=1&query=Krk%20Island%20Croatia' },
+  { name: 'Kolodko miniszobor: Carpathia hajó', cat: 'sight', lat: 45.32600, lng: 14.44000, url: 'https://www.google.com/maps/search/?api=1&query=Kolodko%20Carpathia%20mini%20statue%20Rijeka' },
+  { name: 'Spomenik i spomen-kosturnica palih boraca', cat: 'sight', lat: 45.32734, lng: 14.45927, url: 'https://www.google.com/maps/search/?api=1&query=Spomen-kosturnica%20palih%20boraca%20Park%20heroja%20Trsat%20Rijeka' },
+  { name: 'Vidikovac Fortica', cat: 'sight', lat: 45.33150, lng: 14.45350, url: 'https://www.google.com/maps/search/?api=1&query=Vidikovac%20Fortica%20Trsat%20Rijeka' },
+  { name: 'Banska vrata', cat: 'sight', lat: 45.33410, lng: 14.45844, url: 'https://www.google.com/maps/search/?api=1&query=Banska%20vrata%20Rijeka' },
+  { name: 'Sablićevo strand', cat: 'sight', lat: 45.31797, lng: 14.46583, url: 'https://www.google.com/maps/search/?api=1&query=Sablicevo%20beach%20Rijeka' },
+  { name: 'Beach bar Kamov', cat: 'sight', lat: 45.31807, lng: 14.46583, url: 'https://www.google.com/maps/search/?api=1&query=Beach%20bar%20Kamov%20Rijeka' },
+  { name: 'Amadria Park Caffè Wagner', cat: 'food', lat: 45.33000, lng: 14.30300, url: 'https://www.google.com/maps/search/?api=1&query=Amadria%20Park%20Caffe%20Wagner%20Opatija' },
+  { name: 'La Terrazza', cat: 'food', lat: 45.32402, lng: 14.29942, url: 'https://www.google.com/maps/search/?api=1&query=La%20Terrazza%20Opatija' },
+  { name: 'Bistro Na Kantridi', cat: 'food', lat: 45.33842, lng: 14.38107, url: 'https://www.google.com/maps/search/?api=1&query=Bistro%20Na%20Kantridi%20Rijeka' },
+  { name: 'Boonker', cat: 'food', lat: 45.32695, lng: 14.43750, url: 'https://www.google.com/maps/search/?api=1&query=Boonker%20Rijeka' },
+  { name: 'Restoran Lungomare', cat: 'food', lat: 45.32971, lng: 14.30150, url: 'https://www.google.com/maps/search/?api=1&query=Restoran%20Lungomare%20Opatija' },
+  { name: 'Ostaria Veranda', cat: 'food', lat: 45.34884, lng: 14.32022, url: 'https://www.google.com/maps/search/?api=1&query=Ostaria%20Veranda%20Volosko' },
+  { name: 'Volosko kikötő / part', cat: 'food', lat: 45.34839, lng: 14.32006, url: 'https://www.google.com/maps/search/?api=1&query=Volosko%20harbour%20Croatia' },
+  { name: 'Restaurant Zrinski (Krk)', cat: 'food', lat: 45.02588, lng: 14.57544, url: 'https://www.google.com/maps/search/?api=1&query=Restaurant%20Zrinski%20Krk' },
+  { name: 'Pizzeria Bella Vista', cat: 'food', lat: 45.16462, lng: 14.54501, url: 'https://www.google.com/maps/search/?api=1&query=Pizzeria%20Bella%20Vista%20Primorska%20cesta%2017%20Njivice%20Krk' },
+  { name: 'Ivić voće i povrće', cat: 'food', lat: 45.16431, lng: 14.54188, url: 'https://www.google.com/maps/search/?api=1&query=45.16430833906621%2C14.541884827137045' },
+  { name: 'Stari Grad parkoló', cat: 'parking', lat: 45.32710, lng: 14.44601, url: 'https://www.google.com/maps/search/?api=1&query=Stari%20Grad%20Parking%20Rijeka' },
+  { name: 'Zagrad B Parking lot', cat: 'parking', lat: 45.32982, lng: 14.43965, url: 'https://www.google.com/maps/search/?api=1&query=Zagrad%20B%20Parking%20Rijeka' },
+  { name: 'Szállás', cat: 'stay', lat: 45.32319, lng: 14.45721, url: 'https://www.google.com/maps/search/?api=1&query=%C5%A0etali%C5%A1te%20XIII%20divizije%2017%2C%2051000%20Rijeka%2C%20Croatia' }
+];
+
+const map = L.map('leaflet-map').setView([45.34, 14.42], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+const bounds = [];
+PLACES.forEach(p => {
+  const marker = L.circleMarker([p.lat, p.lng], {
+    radius: 8, color: '#fff', weight: 2, fillColor: COLORS[p.cat], fillOpacity: 1
+  }).addTo(map);
+  marker.bindPopup(`<strong>${p.name}</strong><br><a href="${p.url}" target="_blank" rel="noopener">Térkép ↗</a>`);
+  bounds.push([p.lat, p.lng]);
+});
+map.fitBounds(bounds, { padding: [24, 24] });
 </script>
 </body>
 </html>
